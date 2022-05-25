@@ -3,7 +3,7 @@ from pydantic import BaseModel, Field
 
 
 class BlogBase(BaseModel):
-    title: Optional[str] = Field(example='Title Blog')
+    title: Optional[str] = Field(example='Title Blog', max_length=300)
     body: Optional[str] = Field(example='Text Blog')
 
 
@@ -12,12 +12,4 @@ class BlogCreate(BlogBase):
 
 
 class BlogShow(BlogBase):
-    author: Optional[str]
-
-
-
-class BlogInDB(BlogBase):
-    id: int
-    title: str
-    body: str
-    author: int
+    id: str

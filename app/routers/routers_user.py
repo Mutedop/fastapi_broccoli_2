@@ -1,7 +1,7 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 
+from app.crud import crud_auth
 from app.db import models, db
-from app.routers.logic import get_password_hash
 from app.schemas import schemas_user
 
 router = APIRouter(
@@ -16,6 +16,11 @@ async def read_users():
     return await db.database.fetch_all(query)
 
 
+@router.get('/me')
+async def read_me(current_user: schemas_user.User = Depends(crud_auth.get_current_user)):
+    return current_user
+
+
 @router.get('/{user_id}', response_model=list[schemas_user.UserShow])
 async def read_user(user_id: int):
     query = models.users.select().where(models.users.c.id == user_id)
@@ -26,7 +31,7 @@ async def read_user(user_id: int):
 async def create_user(item: schemas_user.UserCreate):
     query = models.users.insert().values(
         name=item.name,
-        password=get_password_hash(item.password),
+        password=crud_auth.get_password_hash(item.password),
         email=item.email
     )
     record_id = await db.database.execute(query)

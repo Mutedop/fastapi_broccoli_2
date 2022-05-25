@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
 from app.db import db
-from app.routers import blog, user, logic
+from app.routers import routers_user, routers_blog, routers_auth
 from description import tags_metadata, description
 
 app = FastAPI(
@@ -10,7 +10,7 @@ app = FastAPI(
     description=description,
     version='2.0.1',
     contact={
-        'name': 'Mutedop',
+        'name': 'Pavel P.',
         'github': 'https://github.com/Mutedop',
     },
     license_info={
@@ -18,9 +18,9 @@ app = FastAPI(
     },
 )
 
-app.include_router(blog.router)
-app.include_router(user.router)
-app.include_router(logic.router)
+app.include_router(routers_blog.router)
+app.include_router(routers_user.router)
+app.include_router(routers_auth.router)
 
 
 @app.on_event('startup')

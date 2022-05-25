@@ -1,8 +1,7 @@
 from fastapi import APIRouter, status, HTTPException, Depends
 
-from app.db import db
-from app.db import models
-from app.routers.logic import get_current_user
+from app.crud import crud_auth
+from app.db import db, models
 from app.schemas import schemas_blog, schemas_user
 
 router = APIRouter(
@@ -38,31 +37,25 @@ async def read_blog(blog_id: int):
     return blog
 
 
-# @router.post('/',
-#              response_model=schemas_blog.BlogShow,
-#              status_code=status.HTTP_201_CREATED,
-#              summary='Create an blog',
-#              response_description='The created blog')
-# async def create_blog(item: schemas_blog.BlogCreate):
-#     """
-#     Create a blog with all the information:
-#
-#     - **title**: Amazing title of your blog
-#     - **body**: Unique, unconditional, unpretentious text of your blog
-#     """
-#     query = models.blogs.insert().values(title=item.title, body=item.body)
-#     record_id = await db.database.execute(query)
-#     return {**item.dict(), 'id': record_id}
+@router.post('/',
+             response_model=schemas_blog.BlogShow,
+             status_code=status.HTTP_201_CREATED,
+             summary='Create an blog',
+             response_description='The created blog')
+async def create_blog(
+        item: schemas_blog.BlogCreate,
+        current_user: schemas_user.User = Depends(crud_auth.get_current_user)
+):
+    """
+    Create a blog with all the information:
 
-
-@router.post('/', response_model=schemas_blog.BlogShow)
-async def create_blog_owner(item: schemas_blog.BlogCreate,
-                            current_user: schemas_user.User = Depends(
-                                get_current_user)):
+    - **title**: Amazing title of your blog
+    - **body**: Unique, unconditional, unpretentious text of your blog
+    """
     query = models.blogs.insert().values(
         title=item.title,
         body=item.body,
-        author=current_user.email
+        author=current_user.id
     )
     record_id = await db.database.execute(query)
     return {**item.dict(), 'id': record_id}

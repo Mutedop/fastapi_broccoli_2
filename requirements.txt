@@ -4,3 +4,4 @@ pydantic
 databases
 passlib
 python-jose
+jose
