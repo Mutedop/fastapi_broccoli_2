@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
 from app.db import db
-from app.routers import blog, user
+from app.routers import blog, user, logic
 from description import tags_metadata, description
 
 app = FastAPI(
@@ -20,6 +20,7 @@ app = FastAPI(
 
 app.include_router(blog.router)
 app.include_router(user.router)
+app.include_router(logic.router)
 
 
 @app.on_event('startup')

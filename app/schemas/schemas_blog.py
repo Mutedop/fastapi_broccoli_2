@@ -8,12 +8,12 @@ class BlogBase(BaseModel):
 
 
 class BlogCreate(BlogBase):
-    title: str
-    body: str
+    pass
 
 
 class BlogShow(BlogBase):
-    pass
+    author: Optional[str]
+
 
 
 class BlogInDB(BlogBase):

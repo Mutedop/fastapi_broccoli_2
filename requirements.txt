@@ -2,3 +2,5 @@ fastapi
 sqlalchemy
 pydantic
 databases
+passlib
+python-jose
