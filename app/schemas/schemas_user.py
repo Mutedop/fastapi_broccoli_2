@@ -1,3 +1,6 @@
+from typing import Union
+from uuid import UUID
+
 from pydantic import BaseModel, EmailStr
 
 
@@ -14,7 +17,7 @@ class UserBase(BaseModel):
 
 
 class UserShow(UserBase):
-    id: int
+    id: Union[UUID, int, str]
 
 
 class UserCreate(UserBase):

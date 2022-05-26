@@ -1,4 +1,6 @@
-from typing import Optional
+from typing import Optional, Union
+from uuid import UUID
+from datetime import datetime
 from pydantic import BaseModel, Field
 
 
@@ -12,4 +14,10 @@ class BlogCreate(BlogBase):
 
 
 class BlogShow(BlogBase):
-    id: str
+    id: Union[UUID, int, str]
+
+
+class BlogShowFull(BlogBase):
+    id: Union[UUID, int, str]
+    created_at: datetime
+    author: str

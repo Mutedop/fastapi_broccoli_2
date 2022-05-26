@@ -17,11 +17,12 @@ async def read_users():
 
 
 @router.get('/me')
-async def read_me(current_user: schemas_user.User = Depends(crud_auth.get_current_user)):
+async def read_me(current_user: schemas_user.User =
+                  Depends(crud_auth.get_current_user)):
     return current_user
 
 
-@router.get('/{user_id}', response_model=list[schemas_user.UserShow])
+@router.get('/{user_id}', response_model=schemas_user.UserShow)
 async def read_user(user_id: int):
     query = models.users.select().where(models.users.c.id == user_id)
     return await db.database.fetch_one(query)

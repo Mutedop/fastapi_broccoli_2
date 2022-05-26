@@ -1,6 +1,8 @@
+from datetime import datetime
+
 from fastapi import APIRouter, status, HTTPException, Depends
 
-from app.crud import crud_auth
+from app.crud import crud_auth, crud_blog
 from app.db import db, models
 from app.schemas import schemas_blog, schemas_user
 
@@ -11,7 +13,7 @@ router = APIRouter(
 
 
 @router.get('/',
-            response_model=list[schemas_blog.BlogShow],
+            response_model=list[schemas_blog.BlogShowFull],
             status_code=status.HTTP_200_OK,
             summary='Read all blogs',
             response_description='The read Blogs')
@@ -21,7 +23,7 @@ async def read_blogs():
 
 
 @router.get('/{blog_id}',
-            response_model=schemas_blog.BlogShow,
+            # response_model=schemas_blog.BlogShowFull,
             status_code=status.HTTP_200_OK,
             summary='Show blog by ID',
             response_description='Show specific blog by ID.')
@@ -55,7 +57,8 @@ async def create_blog(
     query = models.blogs.insert().values(
         title=item.title,
         body=item.body,
-        author=current_user.id
+        author=current_user.name,
+        created_at=datetime.now(),
     )
     record_id = await db.database.execute(query)
     return {**item.dict(), 'id': record_id}
